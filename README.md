@@ -4,3 +4,5 @@
 B站ID：illusory_虚幻
 
 视频介绍：https://www.bilibili.com/video/BV1vQ4y127td/
+
+需要安装的第三方库requests
