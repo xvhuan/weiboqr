@@ -6,11 +6,17 @@ from PIL import Image
 from io import BytesIO
 
 #  --二维码获取
-qrAllUrl = 'https://login.sina.com.cn/sso/qrcode/image?entry=weibo&size=180&callback=STK_' + str(int(time.time()))
-qrJson = json.loads(re.findall(r'[(](.*?)[)]', requests.get(qrAllUrl).text)[0])["data"]
+qrAllUrl = 'https://login.sina.com.cn/sso/qrcode/image?entry=sinawap&size=180&callback=STK_' + str(
+    int(round(time.time() * 1000000)))
+header = {
+    "Referer" : "https://weibo.com/" ,
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0"
+}
+qrJson = json.loads(re.findall(r'[(](.*?)[)]', requests.get(qrAllUrl,headers=header).content.decode())[0])["data"]
+
 qrUrl = qrJson['image']
 qrId = qrJson['qrid']
-qrEcho = BytesIO(requests.get('https:' + qrUrl).content)
+qrEcho = BytesIO(requests.get(qrUrl).content)
 Image.open(qrEcho).show()
 #  --扫码验证
 qrCheckUrl = 'https://login.sina.com.cn/sso/qrcode/check?entry=sso&qrid=' + qrId + '&callback=STK_' + str(
